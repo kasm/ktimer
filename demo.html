@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <script src='ktimer.js'></script>
+        
+    </head>
+    <body>
+        <div  style= 'position:relative'>
+            <div id='ddd'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
+            
+            </div>
+
+            <div id='bbb'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
+            
+            </div>
+
+
+        </div>
+        <script>
+            var timers = Timer2();
+            function moveDDD(e) {
+                var st = e.currentState;
+                ddd.style.left = st[0] + 'px'
+                ddd.style.top = st[1] + 'px'
+            }
+            function moveBBB(e) {
+                var st = e.currentState;
+                bbb.style.left = st[0] + 'px'
+                bbb.style.top = st[1] + 'px'                
+            }
+
+            var t1 = timers.add({
+                name: 'nnn1',
+                repeat: false,
+                active: true,
+                table: [
+                    {time: 0, values: [0, 0] },
+                    {time: 2000, values: [100, 0]},
+                    {time: 2500, values: [100,100]}
+                ],
+                cb: (a) => moveDDD(a)
+            });
+
+            var t2 = timers.add({
+                name: 'timer2',
+                repeat: true,
+                active: true,
+                table: [
+                    {time: 0, values: [222, 0] },
+                    {time: 2000, values: [300, 0]},
+                    {time: 2500, values: [300,100]}
+                ],
+                cb: (a) => moveBBB(a)
+            })
+
+            setInterval(() => timers.tick(), 100)
+
+        </script>
+    </body>
+</html>
