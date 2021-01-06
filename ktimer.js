@@ -135,6 +135,9 @@ function Timer2() {
             tt[ti].active = true;
             console.log('tt ', tt[ti]);
         },
+        delete: function(ti) {
+            
+        },
         tick: function () {
             var oldTime = this.time;
             this.time = Date.now();

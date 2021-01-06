@@ -1,35 +1,53 @@
 <html>
     <head>
         <script src='ktimer.js'></script>
+    
+        <style>
+            .moving {
+                position: absolute; width: 10px; height: 10px; border: 1px solid red;
+            }
+            .desc {
+                position: absolute;
+                bottom: 0px;
+                white-space: pre;
+                font-size: 12px;
+                padding: 0px;
+                border: 1px solid red;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+            }
+            .desc > * {
+                margin: 0px;
+                padding: 0px;
+                //display: inline-block;
+                box-sizing: border-box;
+                border: 1px solid black;
+                left: 0px;
+            }
         
+        #cont {
+            display: flex;
+        }
+        #cont > div {
+            margin: 10px;
+            width: 500px;
+            height: 500px;
+            background-color: rgb(212, 212, 233);
+        }
+    </style>
     </head>
+
     <body>
-        <div  style= 'position:relative'>
-            <div id='ddd'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
-            
-            </div>
-
-            <div id='bbb'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
-            
-            </div>
-
-
-        </div>
-        <script>
-            var timers = Timer2();
-            function moveDDD(e) {
-                var st = e.currentState;
-                ddd.style.left = st[0] + 'px'
-                ddd.style.top = st[1] + 'px'
-            }
-            function moveBBB(e) {
-                var st = e.currentState;
-                bbb.style.left = st[0] + 'px'
-                bbb.style.top = st[1] + 'px'                
-            }
-
+        <div id='timersCont'></div>
+        <div id='cont'>
+            <div style= 'position:relative'>
+                <div id='div1' class='moving'></div>
+                <div class='desc'>
+                    <h3>single time timer</h3>
+                   <div>
             var t1 = timers.add({
-                name: 'nnn1',
+                name: 'timer1',
                 repeat: false,
                 active: true,
                 table: [
@@ -37,22 +55,125 @@
                     {time: 2000, values: [100, 0]},
                     {time: 2500, values: [100,100]}
                 ],
-                cb: (a) => moveDDD(a)
+                cb: (a) => setPosition('div1', a)
             });
+                </div>
+                <div><button onclick = 'addTimer1()'>add</button>               </div>
 
-            var t2 = timers.add({
+                </div>
+            </div>
+
+            <div style= 'position:relative'>
+                <div id='div2' class='moving'></div>
+                <div class='desc'>
+                    <h3>repetitive timer</h3>
+                   <div>
+                    var t2 = timers.add({
+                    name: 'timer2',
+                    repeat: true,
+                    active: true,
+                    table: [
+                        {time: 0, values: [222, 0] },
+                        {time: 2000, values: [300, 0]},
+                        {time: 2500, values: [300,100]},
+                        {time: 3500, values: [222,100]}
+                    ],
+                    cb: (a) => setPosition('div2', a)
+                })
+                </div>
+                <div>
+                    <button onclick = 'addTimer2()'>add</button>
+                    <button onclick = 'stopTimer2()'>stop</button>
+                    <button onclick = 'startTimer2()'>start</button>
+
+                </div>
+
+                </div>
+            </div>
+
+
+            <div  style= 'position:relative'>
+
+            <div id='div1111'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
+            
+            </div>
+
+            <div id='div2'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
+            
+            </div>
+
+
+        </div>
+        </div> <!-- cont -->
+        <script>
+            function setPosition(id, value) {
+                let pos = value.currentState
+                var el = document.getElementById(id)
+                el.style.left = pos[0] + 'px'
+                el.style.top = pos[1] + 'px'
+            }
+            var timers = Timer2();
+            function addTimer1() {
+            var t1 = timers.add({
+                name: 'timer1',
+                repeat: false,
+                active: true,
+                table: [
+                    {time: 0, values: [0, 0] },
+                    {time: 2000, values: [100, 0]},
+                    {time: 2500, values: [100,100]}
+                ],
+                cb: (a) => setPosition('div1', a)
+                });
+            }
+
+            var t2;
+            function addTimer2() {
+                t2 = timers.add({
                 name: 'timer2',
                 repeat: true,
                 active: true,
                 table: [
-                    {time: 0, values: [222, 0] },
-                    {time: 2000, values: [300, 0]},
-                    {time: 2500, values: [300,100]}
+                    {time: 0, values: [22, 20] },
+                    {time: 2000, values: [100, 20]},
+                    {time: 2500, values: [100,120]},
+                    {time: 3500, values: [22,120]}
                 ],
-                cb: (a) => moveBBB(a)
-            })
+                cb: (a) => setPosition('div2', a)
+                })
+            }
+            function pauseTimer2() {
+                timers.pause(t2)
+            }
 
-            setInterval(() => timers.tick(), 100)
+            function stopTimer2() {
+                timers.stop(t2)
+            }
+            function startTimer2() {
+                timers.start(t2)
+            }
+
+            function printTimers() {
+                var strTimer = (t) => {
+                    var iv = t.name + ' ' + t.active 
+                    
+                    var r = t.currentState.reduce((a, e) => a += ' ' + e.toFixed(),iv)
+                    return r;
+                }
+                var s = '';
+                var s2 = timers.tt.reduce((a, e) => a+= strTimer(e) + '<br>', '')
+
+                document.getElementById('timersCont').innerHTML = s2
+
+            }
+           
+
+
+
+            setInterval(() => {
+                timers.tick();
+                printTimers()
+            }, 100)
 
         </script>
     </body>
