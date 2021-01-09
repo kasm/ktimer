@@ -19,6 +19,8 @@ currentTime: currentTime, // can be stopped by switch active
 currentValues: [],
 repeat: true (false),
 active: true (false),
+
+//                                             TABLE FORMAT
 table: [
 { time: time0, values: [ ..... ] },
 { time: time1, values: [ ..... ] },
@@ -32,7 +34,14 @@ if need to create link to other parameter, then curry funciton should be passed:
   ....
 ]}
 
-],
+], // end of table=
+
+// var 2 - in this case user provides totalTime and speed calculated according to length
+globalTime: 2000,
+globalEase: ktimer.bspline(something)
+table: [
+    [x1, y1], [x2, y2], .....
+]
 cb: cbfunc, //  ((this1) => cbfunc)(this)
 cb_end: when timer ended
 cb_stop:
@@ -44,6 +53,11 @@ cb_resume:
     this.current = timers.getParamParam(this.t, this.table);
     app.objects[iObject].position  = this.current;
 }
+
+// new cb format:
+cbfunc(currentState, this(internalNumber, internalPosition, globalPosition(0...1) etc))
+
+
 
 stop(timer)
 pause(timer)
