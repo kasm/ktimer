@@ -65,6 +65,7 @@ function Timer2() {
     // array of states from the beginning to end
     // state is object {t: time, v: array}
     function get_param_param_1(p, a) {
+        //var a = table
         function getIntervalNumber(v, a) {
             for (var i=0; i<a.length; i++) {
                 if (v <= a[i+1]) return i;
@@ -80,6 +81,7 @@ function Timer2() {
 
         var a1 = a.map(e => e.time);
         var i = getIntervalNumber(pn, a1);
+        
         var i1 = getIntervalProportion(pn, i, a1);
         //console.log('------------', pn, i, i1, a1);
         var rez = [];
@@ -95,6 +97,9 @@ function Timer2() {
         return rez;
     } // get param param
 
+    // return current state
+    // p = time - timestart
+    // a - table
     function get_param_param2(p, a) {
         let delta = a[a.length - 1].time - a[0].time;
         return get_param_param_1(p % delta, a);
@@ -116,8 +121,12 @@ function Timer2() {
             p.time = Date.now()
             tt.push(p);
             let n = tt.length -1 ;
+            p.n = n;
             if (tt[n].cbStart) tt[n].cbStart(this);
-            return n;
+            //return n;
+            p.pause = ((p) => () => {p.active = false; })(p)
+            p.start = ((p) => () => {p.active = true; })(p)
+            return p;
         },
         pause: function (ti, cb) {
             tt[ti].active = false;

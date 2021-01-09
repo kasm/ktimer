@@ -4,7 +4,7 @@
     
         <style>
             .moving {
-                position: absolute; width: 10px; height: 10px; border: 1px solid red;
+                position: absolute; width: 20px; height: 20px; border: 1px solid red;
             }
             .desc {
                 position: absolute;
@@ -28,10 +28,11 @@
         
         #cont {
             display: flex;
+            flex-wrap: wrap;
         }
         #cont > div {
             margin: 10px;
-            width: 500px;
+            width: 350px;
             height: 500px;
             background-color: rgb(212, 212, 233);
         }
@@ -92,6 +93,37 @@
             </div>
 
 
+
+            
+            <div style= 'position:relative'>
+                <div id='div3' class='moving'></div>
+                <div class='desc'>
+                    <h3>repetitive timer</h3>
+                   <div>
+                    t3 = timers.add({
+                        name: 'timer3',
+                        repeat: true,
+                        table: [
+                            {time: 0, values: [10, (a) => {
+                                return 20*Math.sin(a * Math.PI)}]},
+                            {time: 3000, values: [(a) => {
+                                return 100+ 20*Math.sin(a * Math.PI)}, 100]},
+                            {time: 8500, values: [100, 100]}
+                        ],
+                        cb: (a) => setPosition('div3', a)
+                    })
+                </div>
+                <div>
+                    <button onclick = 'addTimer3()'>add</button>
+                    <button onclick = 'stopTimer2()'>stop</button>
+                    <button onclick = 'startTimer2()'>start</button>
+
+                </div>
+
+                </div>
+            </div>
+
+
             <div  style= 'position:relative'>
 
             <div id='div1111'style='position: absolute; width: 10px; height: 10px; border: 1px solid red;'>
@@ -111,6 +143,7 @@
                 var el = document.getElementById(id)
                 el.style.left = pos[0] + 'px'
                 el.style.top = pos[1] + 'px'
+                el.innerHTML = value.n
             }
             var timers = Timer2();
             function addTimer1() {
@@ -147,11 +180,34 @@
             }
 
             function stopTimer2() {
-                timers.stop(t2)
+                //timers.stop(t2)
+                t2.pause()
             }
             function startTimer2() {
-                timers.start(t2)
+                timers.start(t2.n)
             }
+
+
+
+            var t3;
+            function addTimer3() {
+                t3 = timers.add({
+                    name: 'timer3',
+                    repeat: true,
+                    table: [
+                        {time: 0, values: [10, (a) => {console.log(a); return 20*Math.sin(a * 5*Math.PI)}]},
+                        //{time: 0, values: [100, 0]},
+                        //{time: 3000, values: [(a) => {console.log(' 2', a);return 100+ 20*Math.sin(a * Math.PI)}, 100]},
+                        {time: 3000, values: [100, 0]},
+                        {time: 8500, values: [100, 100]}
+                    ],
+                    cb: (a, a1, a2) => {
+                        console.log('aaa', a, a1, a2)
+                        setPosition('div3', a)
+                    }
+                })
+            }
+            //addTimer3();
 
             function printTimers() {
                 var strTimer = (t) => {
@@ -173,7 +229,7 @@
             setInterval(() => {
                 timers.tick();
                 printTimers()
-            }, 100)
+            }, 200)
 
         </script>
     </body>
