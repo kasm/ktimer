@@ -1,6 +1,7 @@
 /*
 
 
+
 time framework
 use cases:
 1. loop change values through table
@@ -70,6 +71,29 @@ resume(timer)
 
 
  */
+
+ function bspline1par(x, pnts, i) {
+    let p0 = pnts[i];
+    let p1 = pnts[i+1];
+    let dx = p1[0] - p0[0]
+    let dy = p1[1] - p0[1]
+    let r = [p0[0] + dx*x, p0[1] + dy*x]
+    return r;
+ }
+
+ function dir(p0, p1) {
+    let dx = p1[0] - p0[0]
+    let dy = p1[1] - p0[1]
+    let len = Math.sqrt(dx * dx + dy*dy)
+    return [dx/len, dy/len]
+ }
+
+ function bspline2par(x, pnts) {
+     let p0 = bspline1par(x, pnts[0])
+     let p1 = bspline1par(x, pnts[1])
+     let r = bspline1par(x, [p0, p1])
+     return r;
+ }
 
 function Timer2() {
     var tt = [];
